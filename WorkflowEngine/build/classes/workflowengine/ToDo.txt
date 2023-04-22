@@ -1,0 +1,181 @@
+=====================================================================
+
+NB - Maintain "Exceptions.error-list.txt" as you think of them
+
+
+1). Model Classes + Their Enums:
+
+a). Current State:
+- Main focus for now, initial pass done about structure + some basic methods.
+    => Mostly around incrementing task IDs.
+    => Ported the Date TokenGenerator Utils (keys for items).
+    => Core methods for making, running tasks from workItems done.
+    => Changed TaskLog to be TaskLogging - ProcessLog + ProcessData (procID etc)
+
+- Items and Tasks has the most in terms of attributes:
+    => Single & Nested WorkItems being under an interface was more about
+        trying access same type of item under one class.
+
+    => Reckon it could be handled differently though:
+        => Say via an adapter of some kind, different design pattern more apt?
+
+    => WorkItem, ItemTask, TaskLogging pretty much square:
+        => WorkItem Factory needs some more work still.
+
+    => Can move onto WorkItemCollection & WorkFlow objects.
+
+- Enums are only templated for now, however ItemType Enum could used for execution.
+    => Added some basic querying methods for factory.
+    => Not needed so far from developing Factory.
+    => Tests for WorkItem & Collection worked fine.
+    => Added most from Generator, where most could be private, and public based on String/List-String inputs
+
+- Decided to decouple a WorkItemCollection from a WorkFlow:
+    => WorkItemCollection = querying, etc.
+    => WorkFlow = application context.
+    => Dumped Index-Interface.
+
+- Moving away from:
+    => WorkItem, and ItemTasks having to execute themselves.
+    => List-ItemTasks in WorkItem-Interface being Workload.
+    => Executor takes this responsibility (atm they are separated, chain does not really work).
+    => Process is Runner -> PoolManager -> Executor.
+
+
+- Parallel processing of work items in appropriate pool.
+- Parallel processing of nested work items.
+
+- Considering ModelFactory:
+    => Chain of Model Factories.
+    => Creates a Model Object from a Request.
+    => A Request is HashMap of Keys => Atrributes, Attributes => values.
+    => Keys could just be an enum value.
+    => Coming back here once the Controller is further along.
+
+2). Controller:
+
+a). Current State
+- Exploring Executor & Parallelization
+- First pass of major classes, whole lot works well:
+    => The tasksDone never exceeds taskCount & related tasks are executed.
+        * Means a WorkItem is only processed once, and their ItemTasks are only processed once.
+        * 3 workers run ItemExecutor, and 3 workers run TaskExecutor.
+
+    => Main cleaning is towards single vs parallel Runner.
+        * Speaks to type of Engine then?
+
+    => Make use of pop N WorkItems method, then verify that list.
+        * Continually do this instead of current.
+
+    => Make better use of the RunnerState.
+
+    => Utility class swallows most of the "main-demo" methods.
+        * Include demo methods.
+        * Some of these will also be taken by the Manager.
+
+    => An Engine should always run in its own thread/context:
+        * Works well with the test "waitOnTask()" method.
+        *  
+
+
+=====================================================================
+
+
+ToDo:
+
+    => Test & Expand Generator:
+        - Methods in WorkItem (bit of work here):
+            => Once over on SingleTask work item methods.
+            => Once over on NestedTask work item methods.
+
+        - WorkItemCollection
+        - Workflow
+        => Move onto to the Controller once done
+
+
+    => TaskLogging model is empty (updated in WorkItem):
+        - Has TaskLog
+        - Additional attributes set from executing (ie time, procId etc).
+
+
+    => WorkItem Index Adapter:
+        - Index from list of work items.
+        - Extending indexes.
+        - Query methods.
+        - Valid WorkItemCollection.
+
+    => Adding and dropping WorkItems & ItemTasks
+
+    => Model Generator for testing purposes (ie "ping" etc).
+
+
+    => Basic getters/setters, and toStrings
+        * WorkItem is an interface.
+
+
+    => Basic isTypes and similar for Enums:
+        - Still needed for WorkItem index types
+
+
+    => Strategic Factory Chains for the WorkItem, and Task model classes:
+        - A Singe/Nested WorkItem has a TaskLogging attribute
+
+
+    => WorkItem Collection model to decouple querying from the WorkFlow model (it is database, not a table):
+        a). Linear & non-linear methods.
+        b). Refactor the IndexCollection class, and WorkItemIndex Enum of valid WorkItem Indexes:
+                => Anything you can differently here?
+                => Somewhat, WorkItem_Index should only be update with new items
+
+
+    => WorkFlow:
+        - Items grouped by state into a hashmap.
+        - Queries of work item collection passed to that class.
+
+
+    => Constants here?
+    => Model.Supporting module (Utils)?
+
+
+    => Parallelization - ForkJoin:
+        - RecursiveAction in ParallelTask (no output).
+        - Explore RecursiveTask (output).
+
+        - Singleton PoolManager seems to work fine:
+            => Testing work assignment will require more progress
+                on Model classes, and ParallelTask class from WorkItem.
+            => Need to modify current ParallelTask for WorkItem list.
+            => Then, look at ItemTask list for Nested-WorkItems.
+            => Most methods covered:
+                - Do not need to handle logs (covered in ItemTask).
+                - Need the subTask, recursiveCompute & compute methods.
+                - Fine that it is a list of WorkItems
+                - ParallelTask can do the locking verification.
+                - Will need a conflicts constant, and can be condition.
+                    => recursiveCompute(int taskIndex, int accumulatedConflicts).
+                    => Once base case is breached can check these values & message accordingly.
+                    => Does not work that way, runner can instead lock N items for its pool.
+                        => Unlock if no time left (nice to have those methods though).
+                        => Notion of Runner consuming a queue comes back in again.
+                        => It samples N tasks from this queue, locks them, refreshes based on this.
+                        => Can swallow current methods for this.
+                - ParallelWorkItems + ParallelItemTasks needs a Runner in front of it.
+
+    => Controller component should have two parts:
+        a). Engine - Do the things
+        b). Entry Point - Provides access to methods, which could be a component of WorkFlow
+
+
+=====================================================================
+
+
+Links:
+1). Start Linux Service on Boot: https://www.linode.com/docs/guides/start-service-at-boot/
+2). Execute OS Commands: https://www.codejava.net/java-se/file-io/execute-operating-system-commands-using-runtime-exec-methods
+3). Parallel Programming (Fork-Join):
+        https://www.javatpoint.com/parallel-programming-in-java
+        https://www.baeldung.com/java-fork-join
+        https://www.logicbig.com/how-to/java/fork-and-join-recursive-action.html
+        https://jenkov.com/tutorials/java-util-concurrent/java-fork-and-join-forkjoinpool.html
+
+
