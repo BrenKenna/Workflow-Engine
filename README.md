@@ -22,6 +22,7 @@ The documentation on classes, and testing is quite lacking. As the "main" is the
 |**WorkItemCollection**|Holds a collection of WorkItems
 |**WorkFlow**|Holds Map of an ItemState-Enum key, and WorkItemCollection
 
+
 # Core Controller Classes
 
 |**Name**|**Purpose**|
@@ -31,6 +32,7 @@ The documentation on classes, and testing is quite lacking. As the "main" is the
 |**Executor**|Executes a workitems task|
 |**Modifier**|Handles the logic of editing WorkItem States|
 |**PoolManager**|Holds worker pools for the engine, and processing of workitems and their tasks. Meaning three pools|
+
 
 # Core Object Constructing Classes
 The idea is that a factory is given a request form, which contains the data it needs to construct the required model object. But it means a "core" model object, needs its own concrete factory, and concrete request form.
