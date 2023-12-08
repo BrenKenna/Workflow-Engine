@@ -14,23 +14,23 @@ There were also some questions about "*doing certain things in a more maintainab
 The documentation on classes, and testing is quite lacking. As the "main" is the test module to a degree lol, but this was mostly a conceptual side-project. To touchbase with parallel computing in Java tbh.
 
 # Core Model Classes
-|**Name**|**Purpose**|****|
-|--|--|--|
-|**WorkItem**  |Model object which holds the unit of work, process logs, etc  | |
-|**ItemTask**|OS process to run, ex ping host|
-|**TaskLogging**|Holds the logs from running the OS process|
-|**WorkItemCollection**|Holds a collection of WorkItems|
-|**WorkFlow**|Holds Map of an ItemState-Enum key, and WorkItemCollection|
+|**Name**|**Purpose**|
+|--|--|
+|**WorkItem**  |Model object which holds the unit of work, process logs, etc
+|**ItemTask**|OS process to run, ex ping host
+|**TaskLogging**|Holds the logs from running the OS process
+|**WorkItemCollection**|Holds a collection of WorkItems
+|**WorkFlow**|Holds Map of an ItemState-Enum key, and WorkItemCollection
 
 # Core Controller Classes
 
-|**Name**|**Purpose**|**_**|
-|--|--|--|
-|**Engine**|Uses supporting modules to process the workload given to it||
-|**Runner**|Iteratively validates whether a task can be processed, ex only todo workitems can be processed||
-|**Executor**|Executes a workitems task||
-|**Modifier**|Handles the logic of editing WorkItem States||
-|**PoolManager**|Holds worker pools for the engine, and processing of workitems and their tasks. Meaning three pools||
+|**Name**|**Purpose**|
+|--|--|
+|**Engine**|Uses supporting modules to process the workload given to it|
+|**Runner**|Iteratively validates whether a task can be processed, ex only todo workitems can be processed|
+|**Executor**|Executes a workitems task|
+|**Modifier**|Handles the logic of editing WorkItem States|
+|**PoolManager**|Holds worker pools for the engine, and processing of workitems and their tasks. Meaning three pools|
 
 # Core Object Constructing Classes
 The idea is that a factory is given a request form, which contains the data it needs to construct the required model object. But it means a "core" model object, needs its own concrete factory, and concrete request form.
