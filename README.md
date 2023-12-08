@@ -4,7 +4,9 @@ Modularized look at how to develop an engine which processes the work associated
 While definitely unfinished, I was most interested in the conceptualizing the above problem. For instance my main questions were:
 
 1). How do you run OS commands in Java & what info can you get from that?
-2). How do you go about doing multiple things at the same time?
+
+2). How do you go about doing multiple things at the same time, have the main process observe this, then make decisions on what to do? Terminate if wall time exceeded, gracefully end if resource consumption is becoming too high. Poll states, and log them to somewhere an end-user can flick through etc.
+
 3). How do you control waiting/not waiting for them to complete?
 
 There were also some questions about "*doing certain things in a more maintainable way*", which was nice to explore in my own time (but detailed read). These were mostly raised from college projects exploring design patterns like a "*Strategic Factory Chain*" which constructs an object given a specific type of "*Request*". The concept here also helps developing a better binary search "***Index Interface***" from an old project, because I can make better use of modelling a list of Key-Value pairs to construct an object. To address its "*bulkyness*" around searching a collection of sorted primitive types (String, Int etc).
@@ -31,7 +33,7 @@ The documentation on classes, and testing is quite lacking. As the "main" is the
 |**PoolManager**|Holds worker pools for the engine, and processing of workitems and their tasks. Meaning three pools||
 
 # Core Object Constructing Classes
-The idea is that a factory is given a request form which contains the data it needs to construct the required model object. But it means a "core" model object, needs its own concrete factory, and concrete request form.
+The idea is that a factory is given a request form, which contains the data it needs to construct the required model object. But it means a "core" model object, needs its own concrete factory, and concrete request form.
 
 |**Name**|**Purpose**|**_**|
 |--|--|--|
