@@ -35,8 +35,8 @@ The documentation on classes, and testing is quite lacking. As the "main" is the
 # Core Object Constructing Classes
 The idea is that a factory is given a request form, which contains the data it needs to construct the required model object. But it means a "core" model object, needs its own concrete factory, and concrete request form.
 
-|**Name**|**Purpose**|**_**|
-|--|--|--|
-|**ModelFactory**|Chains the ItemTask and WorkItem Factories into one interface. Which constructs an "***Object***" from a model "***Request***" form, for a specific "***ModelType***" (ie WorkItemTask)||
-|**Concrete Factories**|Each concrete model has a factory which parses its request form, to construct the model desired class||
-|**RequestInterface**|Is a map of a key (ie name of constructor attribute), and a value (ie value for that attribute). Each model object has its own request form.|
+|**Name**|**Purpose**|
+|--|--|
+|**ModelFactory**|Chains the ItemTask and WorkItem Factories into one interface. Which constructs an "***Object***" from a model "***Request***" form, for a specific "***ModelType***" (ie WorkItemTask)|
+|**Concrete Factories**|Each concrete model has a factory which parses its request form, to construct the model desired class|
+|**RequestInterface**|Is a map of a key (ie name of constructor attribute), and a value (ie value for that attribute). Each model object has its own request form.
